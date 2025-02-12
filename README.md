@@ -144,3 +144,100 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For support, please open an issue in the GitHub repository.
+
+CI/CD Pipeline and Deployment for FastAPI Project 🚀
+Overview
+This guide explains how to set up a CI/CD pipeline for a FastAPI project using GitHub Actions and deploy it to an AWS EC2 instance using Nginx as a reverse proxy.
+
+1. Continuous Integration (CI) Pipeline 🔄
+Objective:
+Run automated tests on every pull request (PR) to the main branch.
+Ensure the application is error-free before merging changes.
+CI Pipeline Steps:
+Trigger: Runs on every PR to the main branch.
+Install dependencies (FastAPI, Uvicorn, Pytest, etc.).
+Run automated tests using pytest.
+Fail if tests do not pass to prevent bad code from being merged.
+GitHub Actions CI Workflow (.github/workflows/ci.yml)
+yaml
+
+```bash
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run Tests
+        run: |
+          source venv/bin/activate
+          pytest
+```
+
+Expected Outcome:
+The pipeline runs automatically when a PR is created.
+If tests fail, merging is blocked until the issue is fixed.
+2. Continuous Deployment (CD) Pipeline 🚀
+Objective:
+Deploy the FastAPI app automatically when changes are merged into main.
+CD Pipeline Steps:
+Trigger: Runs when a PR is merged into main.
+Connect to the AWS EC2 instance via SSH.
+Pull the latest code from GitHub.
+Restart the FastAPI application using Uvicorn.
+Restart Nginx to apply changes.
+GitHub Actions CD Workflow (.github/workflows/deploy.yml)
+yaml
+
+```bash
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ubuntu
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          script: |
+            cd ~/fastapi-project  # Change to your project directory
+            git pull origin main  # Pull latest changes
+            source venv/bin/activate  # Activate virtual environment
+            pip install -r requirements.txt  # Install dependencies
+            sudo systemctl restart fastapi  # Restart FastAPI application
+            sudo systemctl restart nginx  # Restart Nginx
+```
+
+Secrets Configuration (GitHub Actions)
+Store sensitive information in GitHub Secrets:
+AWS_HOST: Your EC2 Public IP
+AWS_PRIVATE_KEY: Your EC2 private key (from .pem file)
