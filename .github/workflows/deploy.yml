@@ -17,7 +17,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.AWS_SSH_KEY }}
         script: |
-          cd /home/ubuntu/your-repo
+          cd /home/ubuntu/fastapi-book-project
           git pull origin main
           source venv/bin/activate
           pip install -r requirements.txt
