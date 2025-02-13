@@ -15,7 +15,7 @@ jobs:
       with:
         host: ${{ secrets.AWS_HOST }}
         username: ubuntu
-        key: ${{ secrets.AWS_SSH_KEY }}
+        key: ${{ secrets.AWS_PRIVATE_KEY }}
         script: |
           cd /home/ubuntu/fastapi-book-project
           git pull origin main
