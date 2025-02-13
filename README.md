@@ -145,7 +145,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support, please open an issue in the GitHub repository.
 
-
 ## CI/CD Pipeline and Deployment for FastAPI Project 🚀
 ## Overview
 This guide explains how to set up a CI/CD pipeline for a FastAPI project using GitHub Actions and deploy it to an AWS EC2 instance using Nginx as a reverse proxy.
