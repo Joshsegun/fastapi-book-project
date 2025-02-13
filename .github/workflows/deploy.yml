@@ -23,7 +23,6 @@ jobs:
           pip install -r requirements.txt
           sudo systemctl restart nginx
 
-
 # name: Deployment Pipeline
 
 # on:
