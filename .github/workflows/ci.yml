@@ -9,6 +9,7 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code
@@ -25,5 +26,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Tests
-        run: pytest
+        run: pytest --maxfail=1 --disable-warnings
+        continue-on-error: false
+
+      - name: Check for Syntax Errors
+        run: python -m compileall .
+        
+        
 
