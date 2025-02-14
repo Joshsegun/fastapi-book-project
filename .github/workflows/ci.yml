@@ -31,6 +31,9 @@ jobs:
 
       - name: Check for Syntax Errors
         run: python -m compileall .
+
+      - name: Force CI Failure
+        run: exit 1
         
         
 
